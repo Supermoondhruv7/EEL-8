@@ -1,0 +1,105 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void writeToFile();
+void readFromFile();
+void appendToFile();
+
+int main() {
+    int choice;
+    
+    while (1) {
+        printf("\n================== SMART NOTEPAD ==================\n");
+        printf("1. Create & Write to File\n");
+        printf("2. Read from File\n");
+        printf("3. Append to Existing File\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        getchar(); // clear newline input buffer
+        
+        switch(choice) {
+            case 1:
+                writeToFile();
+                break;
+            case 2:
+                readFromFile();
+                break;
+            case 3:
+                appendToFile();
+                break;
+            case 4:
+                printf("\nExiting Program...\n");
+                exit(0);
+            default:
+                printf("\nInvalid Choice! Try again.\n");
+        }
+    }
+    return 0;
+}
+
+void writeToFile() {
+    char filename[50], text[500];
+    FILE *file;
+
+    printf("\nEnter file name to create: ");
+    scanf("%s", filename);
+    getchar();
+
+    file = fopen(filename, "w");
+    if (file == NULL) {
+        printf("Error creating file!\n");
+        return;
+    }
+
+    printf("Enter text to write (end input by pressing Enter):\n");
+    fgets(text, sizeof(text), stdin);
+    fputs(text, file);
+
+    fclose(file);
+    printf("File created & written successfully!\n");
+}
+
+void readFromFile() {
+    char filename[50], ch;
+    FILE *file;
+
+    printf("\nEnter file name to read: ");
+    scanf("%s", filename);
+
+    file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("File not found or cannot be opened!\n");
+        return;
+    }
+
+    printf("\n------ File Content ------\n");
+    while ((ch = fgetc(file)) != EOF) {
+        putchar(ch);
+    }
+    printf("\n--------------------------\n");
+
+    fclose(file);
+}
+
+void appendToFile() {
+    char filename[50], text[500];
+    FILE *file;
+
+    printf("\nEnter file name to append to: ");
+    scanf("%s", filename);
+    getchar();
+
+    file = fopen(filename, "a");
+    if (file == NULL) {
+        printf("File not found or unable to open!\n");
+        return;
+    }
+
+    printf("Enter text to append:\n");
+    fgets(text, sizeof(text), stdin);
+    fputs(text, file);
+
+    fclose(file);
+    printf("Text appended successfully!\n");
+}
